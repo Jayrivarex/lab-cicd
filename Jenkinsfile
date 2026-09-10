@@ -30,7 +30,8 @@ pipeline {
                     passwordVariable: 'AWS_SECRET_ACCESS_KEY'
                 )]) {
                     sh """
-                        aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+                        ECR_TOKEN=\$(docker run --rm -e AWS_ACCESS_KEY_ID=\$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=\$AWS_SECRET_ACCESS_KEY amazon/aws-cli ecr get-login-password --region ${AWS_REGION})
+                        echo \$ECR_TOKEN | docker login --username AWS --password-stdin ${ECR_REGISTRY}
                         docker tag ${IMAGE_REPO}:${IMAGE_TAG} ${ECR_REGISTRY}/${IMAGE_REPO}:${IMAGE_TAG}
                         docker tag ${IMAGE_REPO}:${IMAGE_TAG} ${ECR_REGISTRY}/${IMAGE_REPO}:jenkins
                         docker push ${ECR_REGISTRY}/${IMAGE_REPO}:${IMAGE_TAG}
