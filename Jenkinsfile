@@ -1,11 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
         stage('Construir Imagen Docker') {
             steps {
                 sh 'docker build -t lab-cicd-app:jenkins .'
