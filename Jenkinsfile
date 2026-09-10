@@ -46,7 +46,7 @@ pipeline {
                 sh """
                     docker run --rm \
                       --net=host \
-                      -v /root/.kube:/root/.kube \
+                      -v /var/jenkins_home/.kube:/root/.kube \
                       -v \$(pwd):/apps \
                       -w /apps \
                       alpine/helm upgrade --install lab-app ./chart \
