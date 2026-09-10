@@ -44,7 +44,11 @@ pipeline {
         stage('4. Deploy to K8s with Helm') {
             steps {
                 sh """
-                    helm upgrade --install lab-app ./chart \
+                    docker run --rm \
+                      -v \$HOME/.kube:/root/.kube \
+                      -v \$(pwd):/apps \
+                      -w /apps \
+                      alpine/helm upgrade --install lab-app ./chart \
                       --set image.tag=${IMAGE_TAG} \
                       -n dev
                 """
