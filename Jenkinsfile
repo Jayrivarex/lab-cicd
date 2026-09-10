@@ -45,7 +45,8 @@ pipeline {
             steps {
                 sh """
                     docker run --rm \
-                      -v \$HOME/.kube:/root/.kube \
+                      --net=host \
+                      -v /root/.kube:/root/.kube \
                       -v \$(pwd):/apps \
                       -w /apps \
                       alpine/helm upgrade --install lab-app ./chart \
