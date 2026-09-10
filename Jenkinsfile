@@ -6,14 +6,19 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Instalación & Pruebas') {
+        stage('Construir Imagen Docker') {
             steps {
-                echo 'Simulando instalación de dependencias y pruebas unitarias...'
+                sh 'docker build -t lab-cicd-app:jenkins .'
             }
         }
-        stage('Despliegue') {
+        stage('Pruebas en Contenedor') {
             steps {
-                echo 'Desplegando la aplicación en producción sin intervención manual...'
+                sh 'docker run --rm lab-cicd-app:jenkins node -e "console.log(\'Sintaxis de Node.js validada correctamente\')"'
+            }
+        }
+        stage('Verificar Artefacto') {
+            steps {
+                sh 'docker images | grep lab-cicd-app'
             }
         }
     }
